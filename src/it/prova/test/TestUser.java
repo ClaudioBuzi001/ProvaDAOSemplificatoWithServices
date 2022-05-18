@@ -31,15 +31,16 @@ public class TestUser {
 
 			testUpdateUser(userService);
 			System.out.println("In tabella ci sono " + userService.listAll().size() + " elementi.");
-			
+
 			testCercaTuttiQuelliCheUsernameIniziaCon(userService);
-			
+
 			testCercaTuttiQuelliCreatiPrimaDi(userService);
-			
+
 			testCercaPerCognomeENomeCheInziaCon(userService);
-			
-			
-			//E TUTTI I TEST VANNO FATTI COSI'
+
+			testAccedi(userService);
+
+			// E TUTTI I TEST VANNO FATTI COSI'
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -104,9 +105,9 @@ public class TestUser {
 		if (risultatifindByExample.size() != 1)
 			throw new RuntimeException("testUpdateUser: testFindByExample FAILED ");
 
-		//mi metto da parte l'id su cui lavorare per il test
+		// mi metto da parte l'id su cui lavorare per il test
 		Long idGiovanna = risultatifindByExample.get(0).getId();
-		
+
 		// ricarico per sicurezza con l'id individuato e gli modifico un campo
 		String nuovoCognome = "Perastra";
 		User toBeUpdated = userService.findById(idGiovanna);
@@ -117,72 +118,71 @@ public class TestUser {
 		System.out.println(".......testUpdateUser inizio.............");
 	}
 
-	
-	
-	
-	
-	
-	
-	
 	private static void testCercaTuttiQuelliCheUsernameIniziaCon(UserService userService) throws Exception {
 		System.out.println("_-------------cercaTuttiQuelliCheUsernameIniziaCon----------_");
-		
+
 		List<User> result = userService.cercaTuttiQuelliCheUsernameIniziaCon("pp");
-		
-		if(result.size() == 0) 
+
+		if (result.size() == 0)
 			System.out.println("_------------cercaTuttiQuelliCheUsernameIniziaCon FAILED--------_");
-		
-		
-		for(User userItem : result) {
-			System.out.println(userItem.getNome()+ " "+ userItem.getCognome()+ " "+ userItem.getLogin());
-				
+
+		for (User userItem : result) {
+			System.out.println(userItem.getNome() + " " + userItem.getCognome() + " " + userItem.getLogin());
+
 		}
-		
+
 		System.out.println("_-------------cercaTuttiQuelliCheUsernameIniziaCon PASSED----------_");
-		
+
 	}
-	
+
 	private static void testCercaTuttiQuelliCreatiPrimaDi(UserService userService) throws Exception {
-		
+
 		System.out.println("_-------------testCercaTuttiQuelliCreatiPrimaDi----------_");
 		Date dataAssunzione = new SimpleDateFormat("dd-MM-yyyy").parse("01-11-2022");
-		
+
 		List<User> result = userService.cercaTuttiQuelliCreatiPrimaDi(dataAssunzione);
-		
-		if(result.size() == 0) 
+
+		if (result.size() == 0)
 			System.out.println("_------------testCercaTuttiQuelliCreatiPrimaDi FAILED--------_");
-		
-		
-		for(User userItem : result) {
-			System.out.println(userItem.getNome()+ " "+ userItem.getCognome()+ " "+ userItem.getLogin());
-				
+
+		for (User userItem : result) {
+			System.out.println(userItem.getNome() + " " + userItem.getCognome() + " " + userItem.getLogin());
+
 		}
-		
+
 		System.out.println("_-------------testCercaTuttiQuelliCreatiPrimaDi PASSED----------_");
-		
+
 	}
-		
-	
-	
+
 	private static void testCercaPerCognomeENomeCheInziaCon(UserService userService) throws Exception {
-		
+
 		System.out.println("_-------------testCercaPerCognomeENomeCheInziaCon----------_");
-		
+
 		List<User> result = userService.cercaPerCognomeENomeCheInziaCon("Rossi", "ma");
-		
-		if(result.size() == 0) 
+
+		if (result.size() == 0)
 			System.out.println("_------------testCercaPerCognomeENomeCheInziaCon FAILED--------_");
-		
-		
-		for(User userItem : result) {
-			System.out.println(userItem.getNome()+ " "+ userItem.getCognome()+ " "+ userItem.getLogin());
-				
+
+		for (User userItem : result) {
+			System.out.println(userItem.getNome() + " " + userItem.getCognome() + " " + userItem.getLogin());
+
 		}
-		
+
 		System.out.println("_-------------testCercaPerCognomeENomeCheInziaCon PASSED----------_");
-		
+
 	}
-	
-	
-	
+
+	private static void testAccedi(UserService userService) throws Exception {
+
+		System.out.println("_-------------testAccedi----------_");
+
+		User result = userService.accedi("gio", "pwd@3");
+
+		if (result == null)
+			System.out.println("---------------testAccedi FAILED----------_");
+
+		System.out.println(result.getNome() + " " + result.getCognome());
+		System.out.println("_-------------testAccedi PASSED----------_");
+	}
+
 }
