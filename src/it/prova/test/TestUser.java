@@ -1,5 +1,6 @@
 package it.prova.test;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +33,8 @@ public class TestUser {
 			System.out.println("In tabella ci sono " + userService.listAll().size() + " elementi.");
 			
 			testCercaTuttiQuelliCheUsernameIniziaCon(userService);
+			
+			testCercaTuttiQuelliCreatiPrimaDi(userService);
 			
 			//E TUTTI I TEST VANNO FATTI COSI'
 
@@ -136,13 +139,29 @@ public class TestUser {
 		
 	}
 	
+	private static void testCercaTuttiQuelliCreatiPrimaDi(UserService userService) throws Exception {
+		
+		System.out.println("_-------------testCercaTuttiQuelliCreatiPrimaDi----------_");
+		Date dataAssunzione = new SimpleDateFormat("dd-MM-yyyy").parse("01-11-2022");
+		
+		List<User> result = userService.cercaTuttiQuelliCreatiPrimaDi(dataAssunzione);
+		
+		if(result.size() == 0) 
+			System.out.println("_------------testCercaTuttiQuelliCreatiPrimaDi FAILED--------_");
+		
+		
+		for(User userItem : result) {
+			System.out.println(userItem.getNome()+ " "+ userItem.getCognome()+ " "+ userItem.getLogin());
+				
+		}
+		
+		System.out.println("_-------------testCercaTuttiQuelliCreatiPrimaDi PASSED----------_");
+		
+	}
+		
 	
 	
-	
-	
-	
-	
-	
+
 	
 	
 	
