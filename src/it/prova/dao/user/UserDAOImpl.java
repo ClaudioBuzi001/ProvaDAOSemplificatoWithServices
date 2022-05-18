@@ -239,7 +239,7 @@ public class UserDAOImpl extends AbstractMySQLDAO implements UserDAO {
 			e.printStackTrace();
 			throw e;
 		}
-		return result; //TODO IMPLEMENTA IN UserServiceImpl
+		return result; // TODO IMPLEMENTA IN UserServiceImpl
 	}
 
 	// cercaTuttiQuelliCreatiPrimaDi
@@ -274,21 +274,79 @@ public class UserDAOImpl extends AbstractMySQLDAO implements UserDAO {
 			e.printStackTrace();
 			throw e;
 		}
-		return result; //TODO IMPLEMENTA IN UserServiceImpl
+		return result; // TODO IMPLEMENTA IN UserServiceImpl
 	}
 
 	// cercaPerCognomeENomeCheInziaCon SOLO NOME DOBBIAMO FARE IL LIKE cognome = e
 	// nome like
 	@Override
-	public List<User> findAllByCognomeAndNomeStartWith(String cognomeInput, String inzialeNomeInput) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<User> findAllByCognomeAndNomeStartWith(String cognomeInput, String inizialeNomeInput) throws Exception {
+		if (isNotActive())
+			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+
+		if (cognomeInput == null || inizialeNomeInput == null || cognomeInput.isEmpty() || inizialeNomeInput.isEmpty())
+			throw new RuntimeException("ERRORE: input non valido");
+
+		ArrayList<User> result = new ArrayList<User>();
+		User userTemp = null;
+
+		try (PreparedStatement ps = connection
+				.prepareStatement("select * from user where cognome = ? and nome like ?;")) {
+
+			ps.setString(1, cognomeInput);
+			ps.setString(2, inizialeNomeInput + "%");
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					userTemp = new User();
+					userTemp.setNome(rs.getString("NOME"));
+					userTemp.setCognome(rs.getString("COGNOME"));
+					userTemp.setLogin(rs.getString("LOGIN"));
+					userTemp.setPassword(rs.getString("PASSWORD"));
+					userTemp.setDateCreated(rs.getDate("DATECREATED"));
+					userTemp.setId(rs.getLong("ID"));
+					result.add(userTemp);
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result; // TODO IMPLEMENTA IN UserServiceImpl
 	}
 
 	@Override
 	public User accedi(String loginInput, String passwordInput) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		if (isNotActive())
+			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+
+		if (loginInput == null || passwordInput == null || loginInput.isEmpty() || passwordInput.isEmpty())
+			throw new RuntimeException("ERRORE: input non valido");
+
+		User userTemp = null;
+
+		try (PreparedStatement ps = connection
+				.prepareStatement("select * from user where login = ? and password = ?;")) {
+
+			ps.setString(1, loginInput);
+			ps.setString(2, passwordInput);
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					userTemp = new User();
+					userTemp.setNome(rs.getString("NOME"));
+					userTemp.setCognome(rs.getString("COGNOME"));
+					userTemp.setLogin(rs.getString("LOGIN"));
+					userTemp.setPassword(rs.getString("PASSWORD"));
+					userTemp.setDateCreated(rs.getDate("DATECREATED"));
+					userTemp.setId(rs.getLong("ID"));
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return userTemp; // TODO IMPLEMENTA IN UserServiceImpl
 	}
 
 }

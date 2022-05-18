@@ -36,6 +36,9 @@ public class TestUser {
 			
 			testCercaTuttiQuelliCreatiPrimaDi(userService);
 			
+			testCercaPerCognomeENomeCheInziaCon(userService);
+			
+			
 			//E TUTTI I TEST VANNO FATTI COSI'
 
 		} catch (Exception e) {
@@ -161,7 +164,24 @@ public class TestUser {
 		
 	
 	
-
+	private static void testCercaPerCognomeENomeCheInziaCon(UserService userService) throws Exception {
+		
+		System.out.println("_-------------testCercaPerCognomeENomeCheInziaCon----------_");
+		
+		List<User> result = userService.cercaPerCognomeENomeCheInziaCon("Rossi", "ma");
+		
+		if(result.size() == 0) 
+			System.out.println("_------------testCercaPerCognomeENomeCheInziaCon FAILED--------_");
+		
+		
+		for(User userItem : result) {
+			System.out.println(userItem.getNome()+ " "+ userItem.getCognome()+ " "+ userItem.getLogin());
+				
+		}
+		
+		System.out.println("_-------------testCercaPerCognomeENomeCheInziaCon PASSED----------_");
+		
+	}
 	
 	
 	
